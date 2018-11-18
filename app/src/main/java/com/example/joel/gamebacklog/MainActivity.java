@@ -75,11 +75,11 @@ public class MainActivity extends AppCompatActivity implements GameClickListener
             if (resultCode == Activity.RESULT_OK) {
                 Bundle extras = data.getExtras();
                 if (extras != null && extras.getString(EXTRA_MODE) != null) {
-                    if (Objects.equals(extras.getString(EXTRA_MODE), EXTRA_CREATE)) {
+                    if (extras.getString(EXTRA_MODE).equals(EXTRA_CREATE)) {
                         new GameAsyncTask(TASK_INSERT_GAME).execute(
                                 (GameObj) extras.getSerializable(EXTRA_GAME)
                         );
-                    } else if (Objects.equals(extras.getString(EXTRA_MODE), EXTRA_UPDATE)) {
+                    } else if (extras.getString(EXTRA_MODE).equals(EXTRA_UPDATE)) {
                         new GameAsyncTask(TASK_UPDATE_GAME).execute(
                                 (GameObj) extras.getSerializable(EXTRA_GAME)
                         );

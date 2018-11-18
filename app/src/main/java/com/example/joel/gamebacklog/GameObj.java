@@ -15,56 +15,58 @@ public class GameObj implements Serializable {
     private int id;
 
     @ColumnInfo(name = "title")
-    private String title;
+    private String mTitle;
     @ColumnInfo(name = "device")
-    private String device;
+    private String mDevice;
     @ColumnInfo(name = "notes")
-    private String notes;
+    private String mNotes;
     @ColumnInfo(name = "status")
-    private String status;
+    private String mStatus;
 
     public GameObj(String title, String device, String notes, String status) {
-
+        this.mTitle = title;
+        this.mDevice = device;
+        this.mNotes = notes;
+        this.mStatus = status;
     }
 
     public int getId() {
         return id;
     }
 
+    public String getTitle() {
+        return mTitle;
+    }
+
+    public String getDevice() {
+        return mDevice;
+    }
+
+    public String getNotes() {
+        return mNotes;
+    }
+
+    public String getStatus() {
+        return mStatus;
+    }
+
     public void setId(int id) {
         this.id = id;
     }
 
-    public String getTitle() {
-        return title;
-    }
-
     public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getDevice() {
-        return device;
+        this.mTitle = title;
     }
 
     public void setDevice(String device) {
-        this.device = device;
-    }
-
-    public String getNotes() {
-        return notes;
+        this.mDevice = device;
     }
 
     public void setNotes(String notes) {
-        this.notes = notes;
-    }
-
-    public String getStatus() {
-        return status;
+        this.mNotes = notes;
     }
 
     public void setStatus(String status) {
-        this.status = status;
+        this.mStatus = status;
     }
-
 }

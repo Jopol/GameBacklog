@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -36,10 +37,10 @@ public class EditActivity extends AppCompatActivity {
 
         Bundle extras = getIntent().getExtras();
         if (extras != null && extras.getString(MainActivity.EXTRA_MODE) != null) {
-            if (Objects.equals(extras.getString(MainActivity.EXTRA_MODE), MainActivity.EXTRA_UPDATE)) {
+            if (extras.getString(MainActivity.EXTRA_MODE).equals(MainActivity.EXTRA_UPDATE)){
                 mIsUpdate = true;
                 gameObj = (GameObj) extras.getSerializable(MainActivity.EXTRA_GAME);
-                statusText.setText(gameObj.getStatus());
+                statusText.setText(Objects.requireNonNull(gameObj).getStatus());
                 titleText.setText(gameObj.getTitle());
                 deviceText.setText(gameObj.getDevice());
                 noteText.setText(gameObj.getNotes());
@@ -47,50 +48,55 @@ public class EditActivity extends AppCompatActivity {
             }
         }
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.saveButton);
+        FloatingActionButton fab = findViewById(R.id.saveButton);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                addGame(titleText.getText().toString(), deviceText.getText().toString(), noteText.getText().toString(), statusText.getText().toString());
+                String mTitleText = titleText.getText().toString();
+                String mDeviceText = deviceText.getText().toString();
+                String mNotesText = noteText.getText().toString();
+                String mStatusText = statusText.getText().toString();
+                Intent intent = new Intent();
+
+                if (
+                        mTitleText.isEmpty()
+                                || mDeviceText.isEmpty()
+                                || mNotesText.isEmpty()
+                                || mStatusText.isEmpty()
+                        ) {
+                    Toast.makeText(
+                            EditActivity.this,
+                            "fill all",
+                            Toast.LENGTH_LONG
+                    ).show();
+                } else if (mIsUpdate) {
+                    gameObj.setTitle(mTitleText);
+                    gameObj.setDevice(mDeviceText);
+                    gameObj.setNotes(mNotesText);
+                    gameObj.setStatus(mStatusText);
+                    intent.putExtra(MainActivity.EXTRA_MODE, MainActivity.EXTRA_UPDATE);
+                    intent.putExtra(MainActivity.EXTRA_GAME, gameObj);
+                    setResult(Activity.RESULT_OK, intent);
+                    finish();
+                } else {
+                    gameObj = new GameObj(mTitleText,mDeviceText,mNotesText, mStatusText);
+                    intent.putExtra(MainActivity.EXTRA_MODE, MainActivity.EXTRA_CREATE);
+                    intent.putExtra(MainActivity.EXTRA_GAME, gameObj);
+                    setResult(Activity.RESULT_OK, intent);
+                    finish();
+                }
             }
         });
     }
-        private void addGame(String title, String device, String notes, String status){
 
-            Intent intent = new Intent();
-
-            // None should be empty
-            if(title.isEmpty() || device.isEmpty() || notes.isEmpty() || status.isEmpty()){
-                Toast.makeText(getBaseContext(), "Please fill in all fields!", Toast.LENGTH_SHORT).show();
-            } else if(mIsUpdate){ // Check whether this is an update or an add
-                // Set all of the info
-                gameObj.setTitle(title);
-                gameObj.setDevice(device);
-                gameObj.setNotes(notes);
-                gameObj.setStatus(status);
-
-                // Prepare the intent with data
-                intent.putExtra(getString(R.string.d_mode), getString(R.string.d_update));
-                intent.putExtra(getString(R.string.d_game), gameObj);
-
-                Toast.makeText(getBaseContext(), "Updated " + title, Toast.LENGTH_SHORT).show();
-
-                // Mark the result as OK and pass the intent as data
-                setResult(RESULT_OK, intent);
-                // Return to the main Activity
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
                 finish();
-            } else {
-                gameObj = new GameObj(title, device, notes, status);
-                intent.putExtra(getString(R.string.d_mode), getString(R.string.d_create));
-                intent.putExtra(getString(R.string.d_game), gameObj);
-
-                Toast.makeText(getBaseContext(), "Added " + title, Toast.LENGTH_SHORT).show();
-
-                // Mark the result as OK and pass the intent as data
-                setResult(RESULT_OK, intent);
-                // Return to the main Activity
-                finish();
-            }
+                break;
         }
-
+        return true;
+    }
 }
+

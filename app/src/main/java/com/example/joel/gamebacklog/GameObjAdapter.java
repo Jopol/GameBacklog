@@ -1,6 +1,5 @@
 package com.example.joel.gamebacklog;
 
-import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,25 +13,25 @@ public class GameObjAdapter extends RecyclerView.Adapter<GameObjAdapter.ViewHold
     private List<GameObj> GamesList;
     final private GameClickListener gameClickListener;
 
-    public GameObjAdapter(List<GameObj> gamesList, MainActivity gameClickListener) {
+    public GameObjAdapter(List<GameObj> gamesList, GameClickListener gameClickListener) {
         this.GamesList = gamesList;
         this.gameClickListener = gameClickListener;
     }
 
 
-    @NonNull
+
     @Override
-    public GameObjAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+    public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
         View view = LayoutInflater.from(viewGroup.getContext()).inflate(
                 R.layout.gamecard,
                 viewGroup,
                 false
         );
-        return new GameObjAdapter.ViewHolder(view);
+        return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull GameObjAdapter.ViewHolder viewHolder, int i) {
+    public void onBindViewHolder(ViewHolder viewHolder, int i) {
             final GameObj gameobj = GamesList.get(i);
             viewHolder.textViewTitle.setText(gameobj.getTitle());
             viewHolder.textViewDevice.setText(gameobj.getDevice());
@@ -54,14 +53,14 @@ public class GameObjAdapter extends RecyclerView.Adapter<GameObjAdapter.ViewHold
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         public TextView textViewTitle, textViewDevice, textViewNotes, textViewStatus;
         public View view;
+
+
         public ViewHolder(View itemView) {
-
             super(itemView);
-
-            textViewTitle =  itemView.findViewById(R.id.editTextTitle);
-            textViewTitle =  itemView.findViewById(R.id.editTextDevice);
-            textViewTitle =  itemView.findViewById(R.id.editTextNote);
-            textViewTitle =  itemView.findViewById(R.id.editTextStatus);
+            this.textViewTitle =  itemView.findViewById(R.id.textViewTitle);
+            this.textViewDevice =  itemView.findViewById(R.id.textViewDevice);
+            this.textViewNotes =  itemView.findViewById(R.id.textViewNotes);
+            this.textViewStatus =  itemView.findViewById(R.id.textViewStatus);
             this.view = itemView;
             itemView.setOnClickListener(this);
         }
